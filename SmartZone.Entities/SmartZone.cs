@@ -14,10 +14,11 @@ namespace SmartZone.Entities
         public string? FacebookLink { get; set; } = String.Empty;
         public string? Logo { get; set; } = String.Empty;
         public string? OwnerId { get; set; } = String.Empty;
+        public string? IdPrefix { get; set; } = String.Empty;
         public bool IsDeleted { get; set; }
         public bool IsExpired { get; set; }
 
-
-        public virtual ICollection<AddressInfo> Addresses { get; set; } = new HashSet<AddressInfo>();
+        // A chain-store may have many stores/branches
+        public virtual ICollection<Store> Stores { get; set; } = new HashSet<Store>();
     }
 }

@@ -17,6 +17,6 @@ namespace SmartZone.DataObjects
         public bool IsDeleted { get; set; }
         public bool IsExpired { get; set; }
 
-        public virtual ICollection<AddressInfoDTO> AddressInfos { get; set; } = Array.Empty<AddressInfoDTO>();
+        public virtual ICollection<StoreDTO> AddressInfos { get; set; } = Array.Empty<StoreDTO>();
     }
 }

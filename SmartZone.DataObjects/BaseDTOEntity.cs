@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SmartZone.DataObjects
+﻿namespace SmartZone.DataObjects
 {
     public class BaseDTOEntity
     {
-        [Key]
         public string Id { get; set; }
     }
 }

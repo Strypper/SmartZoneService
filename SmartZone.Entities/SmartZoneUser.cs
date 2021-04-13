@@ -2,7 +2,7 @@
 
 namespace SmartZone.Entities
 {
-    public class SmartZoneUser
+    public abstract class SmartZoneUser
     {
         [Key]
         public string Guid { get; set; }
