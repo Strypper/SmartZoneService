@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SmartZone.Repositories
 {
-    public class SmartZoneRepository : RepositoryBase<ESZ.SmartZone>, ISmartZoneRepository
+    public class SmartZoneRepository : RepositoryBase<ESZ.SmartZone>, ISmartZoneRepository  //extends 1 CLASS AND 1 INTERFACE ==> get all methods
     {
         public SmartZoneRepository(ESZ.SmartZoneContext szc) : base(szc) { }
         public override IQueryable<ESZ.SmartZone> FindAll(Expression<Func<ESZ.SmartZone, bool>>? predicate)
@@ -23,5 +23,6 @@ namespace SmartZone.Repositories
             entity.IsDeleted = true;
             _dbSet.Update(entity);
         }
+        public IQueryable<ESZ.SmartZone> FindTop(int amount) => _dbSet.Take(amount);
     }
 }

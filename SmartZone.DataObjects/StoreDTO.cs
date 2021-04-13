@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartZone.DataObjects
 {
-    public class AddressInfoDTO : BaseDTOEntity
+    public class StoreDTO : BaseDTOEntity
     {
         public int CityId { get; set; }
         public int DistrictId { get; set; }
