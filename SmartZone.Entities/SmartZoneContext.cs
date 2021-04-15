@@ -9,7 +9,8 @@ namespace SmartZone.Entities
         public virtual DbSet<SmartZone> SmartZones { get; set; } = null;
         public virtual DbSet<SmartZoneEmployee> SmartZoneEmployees { get; set; } = null;
         public virtual DbSet<SmartZoneCustomer> SmartZoneCustomers { get; set; } = null;
-        public virtual DbSet<Store> AddressInfos { get; set; } = null;
+        public virtual DbSet<Store> Stores { get; set; } = null;
+        public virtual DbSet<Food> Foods { get; set; } = null;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -20,12 +21,31 @@ namespace SmartZone.Entities
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
 
+            builder.Entity<Store>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.HasOne(s => s.SmartZone)
+                    .WithMany(smz => smz!.Stores)
+                    .HasForeignKey(s => s!.SmartZoneId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
             builder.Entity<SmartZoneEmployee>(entity =>
             {
                 entity.HasOne(s => s.Store)
                     .WithMany(e => e!.Employees)
-                    .HasForeignKey(s => s!.StroreId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .HasForeignKey(s => s!.StoreId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+
+            builder.Entity<Food>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.HasOne(s => s.Store)
+                    .WithMany(f => f!.Foods)
+                    .HasForeignKey(s => s!.StoreId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }

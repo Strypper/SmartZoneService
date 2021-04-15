@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartZone.Entities
 {
-    class Food : Item
+    public class Food : Item
     {
 
     }
