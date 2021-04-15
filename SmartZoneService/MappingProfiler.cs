@@ -9,11 +9,18 @@ namespace SmartZoneService
         public MappingProfiler()
         {
             CreateMap<SmartZoneDTO, ESZ.SmartZone>()
-                .ForMember(d => d.Id, o => o.Ignore());
+                .ForMember(sz => sz.Id, o => o.Ignore());
             CreateMap<ESZ.SmartZone, SmartZoneDTO>();
 
 
-            CreateMap<StoreDTO, ESZ.Store>().ForMember(d => d.Id, o => o.Ignore()).ForMember(d => d.Id, o => o.Ignore());
+            CreateMap<FoodDTO, ESZ.Food>()
+                .ForMember(f => f.Id, o => o.Ignore());
+            CreateMap<ESZ.Food, FoodDTO>();
+
+
+            CreateMap<StoreDTO, ESZ.Store>()
+                .ForMember(s => s.Id, o => o.Ignore());
+            CreateMap<ESZ.Store, StoreDTO>();
         }
     }
 }

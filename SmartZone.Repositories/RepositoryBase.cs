@@ -25,11 +25,9 @@ namespace SmartZone.Repositories
         public virtual IQueryable<T> FindAll(Expression<Func<T, bool>>? predicate = null)
             => _dbSet.WhereIf(predicate != null, predicate!);
                     
-        public virtual async Task<T?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
-        {
-            var item = await _dbSet.FindAsync(id);
-            return item;
-        }
+        public virtual async Task<T?> FindByIdAsync(string Id, CancellationToken cancellationToken = default)
+            => await _dbSet.FindAsync(Id);
+
         public void Add(T entities)
             => _dbSet.Add(entities);
         public void AddRange(IEnumerable<T> entities)

@@ -8,7 +8,7 @@ namespace SmartZone.Entities
 {
     public class SmartZoneEmployee : SmartZoneUser
     {
-        public string? StroreId { get; set; }
+        public string? StoreId { get; set; }
         public Store? Store { get; set; }
     }
 }

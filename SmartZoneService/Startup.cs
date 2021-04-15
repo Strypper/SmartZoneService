@@ -33,6 +33,8 @@ namespace SmartZoneService
             services.AddDbContextPool<SmartZoneContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SmartZoneContext")));
 
             services.AddTransient<ISmartZoneRepository, SmartZoneRepository>();
+            services.AddTransient<IStoreRepository, StoreRepository>();
+            services.AddTransient<IFoodRepository, FoodRepository>();
 
             var mapperConfig = new MapperConfiguration(mc =>
             {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartZone.Entities;
 
 namespace SmartZone.Entities.Migrations
 {
     [DbContext(typeof(SmartZoneContext))]
-    partial class SmartZoneContextModelSnapshot : ModelSnapshot
+    [Migration("20210415172924_autogenerate ids")]
+    partial class autogenerateids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
