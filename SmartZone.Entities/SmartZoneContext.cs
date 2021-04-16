@@ -27,7 +27,7 @@ namespace SmartZone.Entities
                 entity.HasOne(s => s.SmartZone)
                     .WithMany(smz => smz!.Stores)
                     .HasForeignKey(s => s!.SmartZoneId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<SmartZoneEmployee>(entity =>
