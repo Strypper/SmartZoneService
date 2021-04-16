@@ -6,7 +6,7 @@ using SmartZone.DataObjects;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESZ = SmartZone.Entities;
+using SmartZone.Entities;
 
 namespace SmartZoneService.Controllers
 {
@@ -45,11 +45,41 @@ namespace SmartZoneService.Controllers
         public async Task<IActionResult> Create(StoreDTO dto,
                                                 CancellationToken cancellationToken = default)
         {
-            var store = _mapper.Map<ESZ.Store>(dto);
+            var store = _mapper.Map<Store>(dto);
             _storeRepository.Add(store);
             await _storeRepository.SaveChangesAsync(cancellationToken);
 
             return CreatedAtAction(nameof(GetById), new { store.Id }, _mapper.Map<StoreDTO>(store));
+        }
+
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Update(StoreDTO dto,
+                                                CancellationToken cancellationToken = default)
+        {
+            var store = await _storeRepository.FindByIdAsync(dto.Id, cancellationToken);
+            if (store == null || store.IsDeleted == true) return NotFound("Cannot find your Store with id {0} "
+                                                                                    + dto.Id
+                                                                                    + " or it has been deleted");
+            var foods = store.Foods;
+
+            store = _mapper.Map<Store>(dto);
+            store.Foods = foods;
+            _storeRepository.Update(store);
+            return CreatedAtAction(nameof(GetById), new { dto.Id }, _mapper.Map<StoreDTO>(store));
+        }
+
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id,
+                                                CancellationToken cancellationToken = default)
+        {
+            var store = await _storeRepository.FindByIdAsync(Id, cancellationToken);
+            if (store == null) return NotFound("No Store Found");
+
+            store.IsDeleted = true;
+            _storeRepository.Update(store);
+            return NoContent();
         }
     }
 }
