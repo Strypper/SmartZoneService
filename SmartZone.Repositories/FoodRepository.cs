@@ -3,6 +3,10 @@ using SmartZone.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System;
+using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartZone.Repositories
 {
@@ -14,5 +18,8 @@ namespace SmartZone.Repositories
         {
             _dbSet.RemoveRange(Foods);
         }
+
+        public async Task<ICollection<Food>> FindFoodByStoreId(string storeId, CancellationToken cancellationToken) 
+            => await FindAll(f => f.StoreId == storeId).ToListAsync(cancellationToken);
     }
 }
