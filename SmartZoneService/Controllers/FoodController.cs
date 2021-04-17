@@ -38,7 +38,10 @@ namespace SmartZoneService.Controllers
             //if (foods.Count == 0) return NotFound("No Food Found");
 
             //cach 2:
-            return Ok(_mapper.Map<IEnumerable<FoodDTO>>(_foodRepository.FindAll(f => f!.StoreId == StoreId)));
+            //return Ok(_mapper.Map<IEnumerable<FoodDTO>>(_foodRepository.FindAll(f => f!.StoreId == StoreId)));
+
+            //cach 3:
+            return Ok(_mapper.Map<IEnumerable<FoodDTO>>(_foodRepository.FindFoodByStoreId(StoreId, cancellationToken)));
         }
 
 
