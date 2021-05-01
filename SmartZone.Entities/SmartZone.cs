@@ -8,6 +8,7 @@ namespace SmartZone.Entities
 {
     public class SmartZone : BaseEntity 
     {
+        public string Guid { get; set; }
         public string? Name { get; set; } = String.Empty;
         public string? Photos { get; set; } = String.Empty;
         public string? CoverPhoto { get; set; } = String.Empty;

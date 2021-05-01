@@ -44,11 +44,11 @@ namespace SmartZoneService.Controllers
             return Ok(_mapper.Map<IEnumerable<SmartZoneDTO>>(smartZone));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id , 
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById(int Id , 
                                                  CancellationToken cancellationToken = default)
         {
-            var smartZone = await _smartZoneRepository.FindByIdAsync(id, cancellationToken);
+            var smartZone = await _smartZoneRepository.FindByIdAsync(Id, cancellationToken);
             return Ok(_mapper.Map<SmartZoneDTO>(smartZone));
         }
 
@@ -64,10 +64,10 @@ namespace SmartZoneService.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(string Id , 
+        public async Task<IActionResult> Delete(int id , 
                                                 CancellationToken cancellationToken = default)
         {
-            var smartZone = await _smartZoneRepository.FindByIdAsync(Id, cancellationToken);
+            var smartZone = await _smartZoneRepository.FindByIdAsync(id, cancellationToken);
             if (smartZone == null) return NotFound();
 
             smartZone.IsDeleted = true;

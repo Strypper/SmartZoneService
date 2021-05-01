@@ -34,7 +34,10 @@ namespace SmartZoneService
 
             services.AddTransient<ISmartZoneRepository, SmartZoneRepository>();
             services.AddTransient<IStoreRepository, StoreRepository>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IFoodRepository, FoodRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
