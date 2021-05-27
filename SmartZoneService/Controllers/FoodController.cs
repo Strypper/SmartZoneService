@@ -7,16 +7,15 @@ using SmartZone.Entities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ESZ = SmartZone.Entities;
 
 namespace SmartZoneService.Controllers
 {
     [Route("/api/[controller]/[action]")]
     public class FoodController : ControllerBase
     {
-        private IMapper _mapper { get; set; }
-        private IFoodRepository _foodRepository { get; set; }
-        private IStoreRepository _storeRepository { get; set; }
+        private readonly IMapper _mapper;
+        private readonly IFoodRepository _foodRepository;
+        private readonly IStoreRepository _storeRepository;            
 
         public FoodController(IMapper mapper, IFoodRepository foodRepository, IStoreRepository storeRepository)
         {
@@ -27,26 +26,18 @@ namespace SmartZoneService.Controllers
 
 
         [HttpGet("{StoreId}")]
-        public async Task<IActionResult> GetAllByStore(string StoreId,
+        public async Task<IActionResult> GetAllByStore(int storeId,
                                                        CancellationToken cancellationToken = default)
         {
-            var store = await _storeRepository.FindByIdAsync(StoreId, cancellationToken);
-            if (store == null) return NotFound("No Store Found");
+            var aFood = _foodRepository.FindAll(food => food!.StoreId == storeId).FirstOrDefaultAsync(cancellationToken);
+            if (aFood == null) return NotFound("No Store Or No Food Found");
 
-            //cach 1:
-            //var foods = await _foodRepository.FindAll(f => f!.StoreId == StoreId).ToListAsync();
-            //if (foods.Count == 0) return NotFound("No Food Found");
-
-            //cach 2:
-            //return Ok(_mapper.Map<IEnumerable<FoodDTO>>(_foodRepository.FindAll(f => f!.StoreId == StoreId)));
-
-            //cach 3:
-            return Ok(_mapper.Map<IEnumerable<FoodDTO>>(_foodRepository.FindFoodByStoreId(StoreId, cancellationToken)));
+            return Ok(_mapper.Map<IEnumerable<FoodDTO>>(await _foodRepository.FindAll(storeId).ToListAsync()));
         }
 
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(string Id,
+        public async Task<IActionResult> GetById(int Id,
                                                  CancellationToken cancellationToken = default)
         {
             var food = await _foodRepository.FindByIdAsync(Id, cancellationToken);
@@ -55,10 +46,10 @@ namespace SmartZoneService.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(FoodDTO dto, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create([FromBody] FoodDTO dto, CancellationToken cancellationToken = default)
         {
             var store = await _storeRepository.FindByIdAsync(dto.StoreId);
-            if (store == null) return NotFound("No store found");
+            if (store == null) return NotFound("No Store Found");
 
             var food = _mapper.Map<Food>(dto);
             _foodRepository.Add(food);
@@ -69,7 +60,7 @@ namespace SmartZoneService.Controllers
 
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> Update(FoodDTO dto,
+        public async Task<IActionResult> Update([FromBody] FoodDTO dto,
                                                 CancellationToken cancellationToken = default)
         {
             var food = await _foodRepository.FindByIdAsync(dto.Id, cancellationToken);
@@ -77,24 +68,26 @@ namespace SmartZoneService.Controllers
 
             food = _mapper.Map<Food>(dto);
             _foodRepository.Update(food);
+
             return CreatedAtAction(nameof(GetById), new { dto.Id }, _mapper.Map<SmartZoneDTO>(food));
         }
 
 
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteById(string Id,
+        public async Task<IActionResult> DeleteById(int Id,
                                                 CancellationToken cancellationToken = default)
         {
             var food = await _foodRepository.FindByIdAsync(Id, cancellationToken);
             if (food == null) return NotFound("No Food Found");
 
             _foodRepository.Delete(food);
+
             return NoContent();
         }
 
 
         [HttpDelete("{StoreId}")]
-        public async Task<IActionResult> DeleteAllByStore(string StoreId,
+        public async Task<IActionResult> DeleteAllByStore(int StoreId,
                                                 CancellationToken cancellationToken = default)
         {
             var store = await _storeRepository.FindByIdAsync(StoreId, cancellationToken);
@@ -103,10 +96,9 @@ namespace SmartZoneService.Controllers
             var food = store.Foods;
             if (food == null) return NotFound("No Food Found");
 
-            _foodRepository.DeleteAllByStore(food);
+            _foodRepository.DeleteRange(food);
+
             return NoContent();
         }
-
-
     }
 }

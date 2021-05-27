@@ -7,7 +7,7 @@ namespace SmartZone.Entities
     public class Store : BaseEntity
     {
         public SmartZone SmartZone { get; set; }
-        public string SmartZoneId { get; set; }
+        public int SmartZoneId { get; set; }
         public int CityId { get; set; }
         public int DistrictId { get; set; }
         public int Seats { get; set; }
@@ -18,17 +18,18 @@ namespace SmartZone.Entities
         public string? FaxNumber { get; set; }
         public string? Photos { get; set; }
         public string? Wifis { get; set; }
-        public int? OneStarRating { get; set; }
-        public int? TwoStarRating { get; set; }
-        public int? ThreeStarRating { get; set; }
-        public int? FourStarRating { get; set; }
-        public int? FiveStarRating { get; set; }
+        public int OneStarRating { get; set; } = 0;
+        public int TwoStarRating { get; set; } = 0;
+        public int ThreeStarRating { get; set; } = 0;
+        public int FourStarRating { get; set; } = 0;
+        public int FiveStarRating { get; set; } = 0;
         public DateTime? OpenTime { get; set; }
         public DateTime? CloseTime { get; set; }
         public bool IsDeleted { get; set; } = false;
 
         // A store may have many employees
-        public virtual ICollection<SmartZoneEmployee> Employees { get; set; } = new HashSet<SmartZoneEmployee>();
+        public virtual ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
         public virtual ICollection<Food> Foods { get; set; } = new HashSet<Food>();
+        public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     }
 }

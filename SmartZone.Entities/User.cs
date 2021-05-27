@@ -1,8 +1,8 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartZone.DataObjects
+namespace SmartZone.Entities
 {
-    class SmartZoneUserDTO
+    public abstract class User : BaseEntity
     {
         public string Guid { get; set; }
         public string UserName { get; set; }

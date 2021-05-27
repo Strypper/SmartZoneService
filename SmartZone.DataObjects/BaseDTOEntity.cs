@@ -2,6 +2,6 @@
 {
     public class BaseDTOEntity
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }

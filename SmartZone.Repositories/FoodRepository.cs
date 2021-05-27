@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
+using SmartZone.Repositories.Extensions;
 
 namespace SmartZone.Repositories
 {
@@ -14,12 +15,22 @@ namespace SmartZone.Repositories
     {
         public FoodRepository(SmartZoneContext szc) : base(szc) { }
 
-        public void DeleteAllByStore(ICollection<Food> Foods)
+        public IQueryable<Food> FindAll(int storeId, Expression<Func<Food, bool>>? predicate = null)
+            => _dbSet.Where(food => food.StoreId == storeId).WhereIf(predicate != null, predicate!);
+
+        public IQueryable<Food> FindFoodByOrderId(int orderId, Expression<Func<Food, bool>>? predicate = null)
+            => _dbSet.Where(food => food!.Orders.Any(ord => ord.Id == orderId)).WhereIf(predicate != null, predicate!);
+
+        public IQueryable<Food> FindFoodByName(string name, Expression<Func<Food, bool>>? predicate = null)
         {
-            _dbSet.RemoveRange(Foods);
+            return FindAll(predicate);
         }
 
-        public async Task<ICollection<Food>> FindFoodByStoreId(string storeId, CancellationToken cancellationToken) 
-            => await FindAll(f => f.StoreId == storeId).ToListAsync(cancellationToken);
+
+        public void DeleteRange(ICollection<Food> foods)
+        {
+            _dbSet.RemoveRange(foods);
+        }
+
     }
 }
