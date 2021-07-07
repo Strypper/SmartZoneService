@@ -1,14 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace SmartZone.Entities
 {
-    public abstract class User : BaseEntity
+    public class User : IdentityUser
     {
         public string Guid { get; set; }
-        public string UserName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string? Role { get; set; }
-        public string? Policies { get; set; }
-        public bool IsDeleted { get; set; }
+        [PersonalData]
+        public string? FullName { get; set; } = string.Empty;
+        public string? Policies { get; set; } = string.Empty;
+        public bool IsDeleted { get; set; } = false;
+
+        public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     }
 }

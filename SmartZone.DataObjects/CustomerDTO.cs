@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SmartZone.DataObjects
 {
-    public class CustomerDTO : UserDTO
+    public class CustomerDTO : IdentityUserDTO
     {
         
     }

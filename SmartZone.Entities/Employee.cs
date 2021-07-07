@@ -5,6 +5,6 @@
         public Store? Store { get; set; }
         public int? StoreId { get; set; }
 
-        // public virtual ICollection<Task> Tasks { get; set; } = new HashSet<Task>();
+        // public virtual ICollection<Work> Works { get; set; } = new HashSet<Work>();
     }
 }

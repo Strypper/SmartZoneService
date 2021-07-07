@@ -25,6 +25,7 @@ namespace SmartZoneService.Controllers
             _smartZoneRepository = smartZoneRepository;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
@@ -34,34 +35,52 @@ namespace SmartZoneService.Controllers
             return Ok(_mapper.Map<IEnumerable<StoreDTO>>(stores));
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(int Id,
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id,
                                                  CancellationToken cancellationToken = default)
         {
-            var store = await _storeRepository.FindByIdAsync(Id, cancellationToken);
+            var store = await _storeRepository.FindByIdAsync(id, cancellationToken);
+
+            if (store == null) return BadRequest("No store with id " + id);
 
             return Ok(_mapper.Map<StoreDTO>(store));
         }
 
-        [HttpGet("{SmartZoneId}")]
+
+        [HttpGet("{smartZoneId}")]
         public async Task<IActionResult> GetBySmartZoneId(int smartZoneId,
                                                  CancellationToken cancellationToken = default)
         {
-            var store = await _storeRepository.FindAllBySmartZoneId(smartZoneId)
-                                                    .AsNoTracking()
-                                                    .ToListAsync(cancellationToken);
+            var smz = await _smartZoneRepository.FindByIdAsync(smartZoneId);
 
-            return Ok(_mapper.Map<StoreDTO>(store));
+            if (smz == null) return BadRequest("No SmartZone with id " + smartZoneId);
+            else {
+                var stores = await _storeRepository.FindAllBySmartZoneId(smartZoneId)
+                                                        .AsNoTracking()
+                                                        .ToListAsync(cancellationToken);
+
+                return Ok(_mapper.Map<IEnumerable<StoreDTO>>(stores));
+            }
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> Create(StoreDTO dto,
+        public async Task<IActionResult> Create([FromBody] StoreDTO dto,
                                                 CancellationToken cancellationToken = default)
         {
-            var smartZone = _smartZoneRepository.FindByIdAsync(dto.SmartZoneId);
+            var smartZone = await _smartZoneRepository.FindByIdAsync(dto.SmartZoneId);
             if (smartZone == null) return NotFound("No SmartZone Found");
 
             var store = _mapper.Map<Store>(dto);
+
+            store.IsDeleted = false;
+            store.OneStarRating = 0;
+            store.TwoStarRating = 0;
+            store.ThreeStarRating = 0;
+            store.FourStarRating = 0;
+            store.FiveStarRating = 0;
+
             _storeRepository.Add(store);
             await _storeRepository.SaveChangesAsync(cancellationToken);
 
@@ -74,9 +93,8 @@ namespace SmartZoneService.Controllers
                                                 CancellationToken cancellationToken = default)
         {
             var store = await _storeRepository.FindByIdAsync(dto.Id, cancellationToken);
-            if (store == null || store.IsDeleted == true) return NotFound("Cannot Find Store With Id "
-                                                                                    + dto.Id
-                                                                                    + " Or It Has Been Deleted");
+            if (store == null) return NotFound("Cannot Find Store With Id ");
+
             var foods = store.Foods;
 
             store = _mapper.Map<Store>(dto);
@@ -87,12 +105,12 @@ namespace SmartZoneService.Controllers
         }
 
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(int Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var store = await _storeRepository.FindByIdAsync(Id);
+            var store = await _storeRepository.FindByIdAsync(id, cancellationToken);
             if (store == null || store.IsDeleted == true) return NotFound("Cannot Find Store With Id "
-                                                                                    + Id
+                                                                                    + id
                                                                                     + " Or It Has Been Deleted");
 
             _storeRepository.Delete(store);

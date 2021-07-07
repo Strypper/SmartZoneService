@@ -1,8 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartZone.Entities
 {
-    public class SmartZoneContext : DbContext
+    public class SmartZoneContext : IdentityDbContext<User, 
+                                                        Role, 
+                                                        string, 
+                                                        IdentityUserClaim<string>, 
+                                                        UserRole, 
+                                                        IdentityUserLogin<string>, 
+                                                        IdentityRoleClaim<string>, 
+                                                        IdentityUserToken<string>>
     {
         public SmartZoneContext(DbContextOptions<SmartZoneContext> options) : base(options) { }
 
@@ -15,6 +24,26 @@ namespace SmartZone.Entities
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            // TPT
+            builder.Entity<Customer>().ToTable("Customers");
+            builder.Entity<Employee>().ToTable("Employees");
+
+
+            builder.Entity<User>(entity =>
+            {
+                entity.Property(usr => usr.Guid).HasDefaultValueSql("NEWID()");
+                entity.HasIndex(usr => usr.Guid).IsUnique();
+                entity.HasIndex(usr => usr.UserName).IsUnique();
+            });
+
+
+            builder.Entity<UserRole>(entity =>
+            {
+                entity.HasOne(u_r => u_r.Role).WithMany(rol => rol!.UserRoles).HasForeignKey(u_r => u_r.RoleId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(u_r => u_r.User).WithMany(usr => usr!.UserRoles).HasForeignKey(u_r => u_r.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            });
+
 
             builder.Entity<SmartZone>(entity =>
             {
@@ -34,9 +63,6 @@ namespace SmartZone.Entities
 
             builder.Entity<Employee>(entity =>
             {
-                entity.Property(cus => cus.Guid).HasDefaultValueSql("NEWID()");
-                entity.HasIndex(cus => cus.Guid).IsUnique();
-
                 entity.HasOne(emp => emp.Store)
                     .WithMany(sto => sto.Employees)
                     .HasForeignKey(emp => emp.StoreId)
@@ -46,8 +72,7 @@ namespace SmartZone.Entities
 
             builder.Entity<Customer>(entity =>
             {
-                entity.Property(cus => cus.Guid).HasDefaultValueSql("NEWID()");
-                entity.HasIndex(cus => cus.Guid).IsUnique();
+                
             });
 
 

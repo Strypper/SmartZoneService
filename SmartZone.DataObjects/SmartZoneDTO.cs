@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartZone.DataObjects
 {
-    public class SmartZoneDTO : BaseDTOEntity
+    public class SmartZoneDTO : BaseDTOEntity<int>
     {
         public string? Guid { get; set; }
         public string? Name { get; set; } = string.Empty;
@@ -14,7 +14,7 @@ namespace SmartZone.DataObjects
         public string? CoverPhoto { get; set; } = string.Empty;
         public string? FacebookLink { get; set; } = string.Empty;
         public string? Logo { get; set; } = string.Empty;
-        public string? OwnerId { get; set; } = string.Empty;
+        public int? OwnerId { get; set; } = null;
         public bool IsDeleted { get; set; }
         public bool IsExpired { get; set; }
 
