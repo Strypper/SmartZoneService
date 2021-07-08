@@ -1,7 +1,7 @@
 ﻿namespace SmartZone.DataObjects
 {
-    public class BaseDTOEntity
+    public class BaseDTOEntity<T>
     {
-        public int Id { get; set; }
+        public T Id { get; set; } = default!;
     }
 }

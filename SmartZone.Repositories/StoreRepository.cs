@@ -25,9 +25,7 @@ namespace SmartZone.Repositories
             => _dbSet.WhereIf(predicate != null, predicate!);
 
         public async Task<IEnumerable<Store>> FindNearestStore(int smartZoneId, string location, CancellationToken cancellationToken)
-        {
-            return await FindAll(null).ToListAsync(cancellationToken);
-        }
+            => await FindAll(null).ToListAsync(cancellationToken);
             
     }
 }

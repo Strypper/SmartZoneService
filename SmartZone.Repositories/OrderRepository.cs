@@ -15,8 +15,8 @@ namespace SmartZone.Repositories
     {
         public OrderRepository(SmartZoneContext szc) : base(szc) { }
 
-        public IQueryable<Order> FindAllByCustomerId(int customerId, Expression<Func<Order, bool>>? predicate = null)
-            => _dbSet.Where(ord => ord.CustomerId == customerId).WhereIf(predicate != null, predicate!);
+        public IQueryable<Order> FindAllByCustomerId(string customerId, Expression<Func<Order, bool>>? predicate = null)
+            => _dbSet.Where(ord => ord.CustomerId.Equals(customerId)).WhereIf(predicate != null, predicate!);
 
         public IQueryable<Order> FindAllByStoreId(int storeId, Expression<Func<Order, bool>> predicate = null)
             => _dbSet.Where(ord => ord.StoreId == storeId).WhereIf(predicate != null, predicate!);
@@ -27,11 +27,11 @@ namespace SmartZone.Repositories
                             && DateTime.Today.AddDays(1) >= ord.CreatedAt.Date)
                         .WhereIf(predicate != null, predicate);
 
-        public IQueryable<Order> FindStatusByCustomerId(int customerId, Status status, Expression<Func<Order, bool>> predicate = null)
-            => _dbSet.Where(ord => ord!.CustomerId == customerId && ord!.Status == status).WhereIf(predicate != null, predicate!);
+        public IQueryable<Order> FindStatusByCustomerId(string customerId, OrderStatus status, Expression<Func<Order, bool>> predicate = null)
+            => _dbSet.Where(ord => ord!.CustomerId.Equals(customerId) && ord!.OrderStatus == status).WhereIf(predicate != null, predicate!);
 
-        public IQueryable<Order> FindStatusByStoreId(int storeId, Status status, Expression<Func<Order, bool>> predicate = null)
-            => _dbSet.Where(ord => ord!.CustomerId == storeId && ord!.Status == status).WhereIf(predicate != null, predicate!);
+        public IQueryable<Order> FindStatusByStoreId(int storeId, OrderStatus status, Expression<Func<Order, bool>> predicate = null)
+            => _dbSet.Where(ord => ord!.StoreId == storeId && ord!.OrderStatus == status).WhereIf(predicate != null, predicate!);
 
         //public override void Delete(Order entity)
         //{

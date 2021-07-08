@@ -57,6 +57,7 @@ namespace SmartZoneService.Controllers
                                                 CancellationToken cancellationToken = default)
         {
             var smartZone = _mapper.Map<ESZ.SmartZone>(dto);
+            smartZone.IsDeleted = smartZone.IsExpired = false;
             _smartZoneRepository.Add(smartZone);
             await _smartZoneRepository.SaveChangesAsync(cancellationToken);
 
@@ -86,6 +87,8 @@ namespace SmartZoneService.Controllers
 
             smartZone = _mapper.Map<ESZ.SmartZone>(dto);
             _smartZoneRepository.Update(smartZone);
+            await _smartZoneRepository.SaveChangesAsync(cancellationToken);
+
             return CreatedAtAction(nameof(GetById), new { dto.Id }, _mapper.Map<SmartZoneDTO>(smartZone));
         }
     }

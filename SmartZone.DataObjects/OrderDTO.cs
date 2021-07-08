@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace SmartZone.DataObjects
 {
-    public class OrderDTO : BaseDTOEntity
+    public class OrderDTO : BaseDTOEntity<int>
     {
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public int StoreId { get; set; }
         public string? Note { get; set; } = string.Empty;
-        public Status Status { get; set; } = Status.Pending;
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public DateTime CreatedAt { get; set; }
 
         public virtual ICollection<FoodDTO>? FoodDTOs { get; set; } = Array.Empty<FoodDTO>();

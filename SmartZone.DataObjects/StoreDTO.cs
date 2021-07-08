@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SmartZone.DataObjects
 {
-    public class StoreDTO : BaseDTOEntity
+    public class StoreDTO : BaseDTOEntity<int>
     {
         public int SmartZoneId { get; set; }
         public int CityId { get; set; }

@@ -25,22 +25,24 @@ namespace SmartZoneService.Controllers
         }
 
 
-        [HttpGet("{StoreId}")]
+        [HttpGet("{storeId}")]
         public async Task<IActionResult> GetAllByStore(int storeId,
                                                        CancellationToken cancellationToken = default)
         {
-            var aFood = _foodRepository.FindAll(food => food!.StoreId == storeId).FirstOrDefaultAsync(cancellationToken);
+            var aFood = await _foodRepository.FindAll(food => food.StoreId == storeId).FirstOrDefaultAsync(cancellationToken);
             if (aFood == null) return NotFound("No Store Or No Food Found");
 
             return Ok(_mapper.Map<IEnumerable<FoodDTO>>(await _foodRepository.FindAll(storeId).ToListAsync()));
         }
 
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(int Id,
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id,
                                                  CancellationToken cancellationToken = default)
         {
-            var food = await _foodRepository.FindByIdAsync(Id, cancellationToken);
+            var food = await _foodRepository.FindByIdAsync(id, cancellationToken);
+
+            if (food == null) return BadRequest("No food found");
             return Ok(_mapper.Map<FoodDTO>(food));
         }
 
@@ -81,8 +83,9 @@ namespace SmartZoneService.Controllers
             if (food == null) return NotFound("No Food Found");
 
             _foodRepository.Delete(food);
+            await _foodRepository.SaveChangesAsync(cancellationToken);
 
-            return NoContent();
+            return Ok(new { message = "done" });
         }
 
 

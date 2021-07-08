@@ -11,9 +11,9 @@ namespace SmartZone.Contracts
     {
         public IQueryable<Order> FindAllByStoreId(int storeId, Expression<Func<Order, bool>>? predicate = null);
         public IQueryable<Order> FindByStoreIdToday(int storeId, Expression<Func<Order, bool>>? predicate = null);
-        public IQueryable<Order> FindAllByCustomerId(int customerId, Expression<Func<Order, bool>>? predicate = null);
+        public IQueryable<Order> FindAllByCustomerId(string customerId, Expression<Func<Order, bool>>? predicate = null);
         //public Task<Order> FindLatestByCustomerId(int customerId, CancellationToken cancellationToken = default);
-        IQueryable<Order> FindStatusByCustomerId(int customerId, Status status, Expression<Func<Order, bool>> predicate = null);
-        IQueryable<Order> FindStatusByStoreId(int storeId, Status status, Expression<Func<Order, bool>> predicate = null);
+        IQueryable<Order> FindStatusByCustomerId(string customerId, OrderStatus status, Expression<Func<Order, bool>> predicate = null);
+        IQueryable<Order> FindStatusByStoreId(int storeId, OrderStatus status, Expression<Func<Order, bool>> predicate = null);
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SmartZone.DataObjects
 {
-    public class EmployeeDTO : IdentityUserDTO
+    public class RoleDTO : BaseDTOIdentity
     {
-        public int StoreId { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }
