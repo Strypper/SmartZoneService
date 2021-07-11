@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace SmartZoneService.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ApiController]
     public class CustomerController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -37,7 +38,8 @@ namespace SmartZoneService.Controllers
         {
             var customer = _mapper.Map<Customer>(dto);
             customer.IsDeleted = false;
-            var result = await _customertManager.CreateAsync(customer);
+
+            var result = await _customertManager.CreateAsync(customer, dto.PasswordHash);
             if (!result.Succeeded)
             {
                 return BadRequest(result);

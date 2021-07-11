@@ -33,7 +33,8 @@ namespace SmartZoneService
 
             CreateMap<ESZ.User, IdentityUserDTO>()
                 .ForMember(usr => usr.Roles, opt => opt.MapFrom(usr => usr.UserRoles.Select(u_r => u_r.Role!.Name)));
-            CreateMap<IdentityUserDTO, ESZ.User>();
+            CreateMap<IdentityUserDTO, ESZ.User>()
+                .ForMember(usr => usr.PasswordHash, opt => opt.Ignore());
 
 
             CreateMap<EmployeeDTO, ESZ.Employee>()

@@ -39,11 +39,15 @@ namespace SmartZoneService.Controllers
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user is null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            {
+                return BadRequest(new { message = "Username is incorrect" });
+            }
 
             var passwordCheck = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!passwordCheck.Succeeded)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            {
+                return BadRequest(new { message = "Password is incorrect" });
+            }
 
             var tokenConfig = _tokenConfigOptionsAccessor.CurrentValue;
             var token = await GenerateToken(user, tokenConfig);
