@@ -62,8 +62,17 @@ namespace SmartZoneService.Controllers
             var employee = _mapper.Map<Employee>(dto);
             employee.IsDeleted = false; // Just to make sure that the field is false at the point of creating
 
-            var result = await _employeeManager.CreateAsync(employee);
-            if (!result.Succeeded) return StatusCode(500);
+            var result = await _employeeManager.CreateAsync(employee, dto.PasswordHash);
+            if (!result.Succeeded)
+            {
+                return StatusCode(500);
+            }
+
+            var addtoRoleResullt = await _employeeManager.AddToRoleAsync(employee, "employee");
+            if (!addtoRoleResullt.Succeeded)
+            {
+                return BadRequest("Fail to add role");
+            }
 
             return CreatedAtAction(nameof(GetById), new { employee.Id }, _mapper.Map<EmployeeDTO>(employee));
         }

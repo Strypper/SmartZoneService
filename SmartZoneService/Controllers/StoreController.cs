@@ -100,6 +100,7 @@ namespace SmartZoneService.Controllers
             store = _mapper.Map<Store>(dto);
             store.Foods = foods;
             _storeRepository.Update(store);
+            await _storeRepository.SaveChangesAsync(cancellationToken);
 
             return CreatedAtAction(nameof(GetById), new { dto.Id }, _mapper.Map<StoreDTO>(store));
         }
